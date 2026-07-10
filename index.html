@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <title>lenka</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --green: #24e04b; }
+
+    html, body { height: 100%; background: #000; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      background: #000;
+      -webkit-tap-highlight-color: transparent;
+      overflow: hidden;
+    }
+
+    .phone {
+      position: relative;
+      width: 100%;
+      max-width: 460px;
+      height: 100vh;
+      height: 100dvh;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* ---------- Top image ---------- */
+    .top {
+      position: relative;
+      flex: 47 1 0;
+      overflow: hidden;
+    }
+    .top img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 28%;
+      display: block;
+    }
+    .top::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 48%;
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 65%, #000 100%);
+      pointer-events: none;
+    }
+    .active {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 4%;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 19px;
+      letter-spacing: .2px;
+      text-shadow: 0 1px 5px rgba(0,0,0,.45);
+    }
+    .dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 7px 1px rgba(36,224,75,.9);
+    }
+
+    /* ---------- Bottom image as a clickable card ---------- */
+    .bottom {
+      position: relative;
+      flex: 53 1 0;
+      display: block;
+      text-decoration: none;
+      cursor: pointer;
+      padding: 12px 16px 24px;
+    }
+    .card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #111;
+      border: 1px solid rgba(255,255,255,.07);
+      box-shadow: 0 12px 34px rgba(0,0,0,.55);
+      transition: transform .25s ease;
+    }
+    .bottom:active .card { transform: scale(.985); }
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: filter .4s ease, transform .4s ease;
+    }
+
+    /* Sensitive overlay (revealed state) */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      text-align: center;
+      padding: 24px;
+      color: #fff;
+      background: rgba(0,0,0,.28);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .4s ease;
+    }
+    .overlay .eye { width: 34px; height: 34px; margin-bottom: 6px; opacity: .95; }
+    .overlay h2 { font-size: 22px; font-weight: 700; letter-spacing: .2px; }
+    .overlay p { font-size: 14px; opacity: .82; font-weight: 400; }
+    .overlay .cta {
+      margin-top: 5px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .bottom.revealed .card img { filter: blur(20px); transform: scale(1.12); }
+    .bottom.revealed .overlay { opacity: 1; pointer-events: auto; }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <section class="top">
+      <img src="img/top.jpg" alt="" />
+      <div class="active"><span class="dot"></span> Aktywna</div>
+    </section>
+
+    <a class="bottom" id="reveal" href="https://link.me/lenkabadgirl">
+      <div class="card">
+        <img src="img/bottom.jpg" alt="" />
+
+        <div class="overlay">
+          <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+            <line x1="1" y1="1" x2="23" y2="23" />
+          </svg>
+          <h2>18+ Sensitive Content</h2>
+          <p>This link may contain adult content.</p>
+          <span class="cta">Click to continue</span>
+        </div>
+      </div>
+    </a>
+  </main>
+
+  <script>
+    (function () {
+      var bottom = document.getElementById('reveal');
+      bottom.addEventListener('click', function (e) {
+        // First tap: reveal the sensitive-content overlay instead of navigating.
+        if (!bottom.classList.contains('revealed')) {
+          e.preventDefault();
+          bottom.classList.add('revealed');
+        }
+        // Second tap: let the <a href> navigate to the link normally.
+      });
+    })();
+  </script>
+</body>
+</html>
